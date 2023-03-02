@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6522753D29B0EF0B0023A771 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6522753C29B0EF0B0023A771 /* Alamofire */; };
 		6550717429AF47FF00C8E67D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6550717329AF47FF00C8E67D /* AppDelegate.swift */; };
 		6550717629AF47FF00C8E67D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6550717529AF47FF00C8E67D /* SceneDelegate.swift */; };
 		6550717829AF47FF00C8E67D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6550717729AF47FF00C8E67D /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6522753A29B0EBB60023A771 /* Traits.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Traits.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6550717029AF47FF00C8E67D /* RxPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RxPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6550717329AF47FF00C8E67D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6550717529AF47FF00C8E67D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6522753D29B0EF0B0023A771 /* Alamofire in Frameworks */,
 				6550719329AF48E500C8E67D /* RxSwift in Frameworks */,
 				6550719129AF48E500C8E67D /* RxCocoa in Frameworks */,
 			);
@@ -80,6 +83,7 @@
 			children = (
 				6577D1D829B0801400F99614 /* Observable-개념.playground */,
 				6577D1D929B0802D00F99614 /* Observable-생성 및 제거.playground */,
+				6522753A29B0EBB60023A771 /* Traits.playground */,
 			);
 			path = PlayGround;
 			sourceTree = "<group>";
@@ -110,6 +114,7 @@
 			packageProductDependencies = (
 				6550719029AF48E500C8E67D /* RxCocoa */,
 				6550719229AF48E500C8E67D /* RxSwift */,
+				6522753C29B0EF0B0023A771 /* Alamofire */,
 			);
 			productName = RxPractice;
 			productReference = 6550717029AF47FF00C8E67D /* RxPractice.app */;
@@ -141,6 +146,7 @@
 			mainGroup = 6550716729AF47FF00C8E67D;
 			packageReferences = (
 				6550718F29AF48E500C8E67D /* XCRemoteSwiftPackageReference "RxSwift" */,
+				6522753B29B0EF0B0023A771 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 6550717129AF47FF00C8E67D /* Products */;
 			projectDirPath = "";
@@ -391,6 +397,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6522753B29B0EF0B0023A771 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		6550718F29AF48E500C8E67D /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -402,6 +416,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6522753C29B0EF0B0023A771 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6522753B29B0EF0B0023A771 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
 		6550719029AF48E500C8E67D /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6550718F29AF48E500C8E67D /* XCRemoteSwiftPackageReference "RxSwift" */;

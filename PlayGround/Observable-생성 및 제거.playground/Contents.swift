@@ -1,5 +1,6 @@
 import UIKit
 import RxSwift
+import Alamofire
 
 // 생성 방법으로는 create, just, of, from, range 가 존재합니다.
 // 제거 방법으로는 empty, never, disposable이 존재합니다.
@@ -171,6 +172,47 @@ createObservable.subscribe { element in
 
 // Hello World
 // Complete
+
+// 예제 (AlamoFire + RX)
+struct ArticleResponse: Codable {
+    let articles: [Article]
+}
+
+struct Article: Codable {
+    let title: String
+}
+
+func getNews() -> Observable<[Article]> {
+    return Observable.create { observer in
+        
+        let urlString = "https://newsapi.org/v2/everything?q=tesla&sortBy=publishedAt&apiKey=bc83fae28aeb4e07ab75f770c6b23bb6"
+        
+        AF.request(urlString)
+            .validate(statusCode: 200...299)
+            .responseDecodable(of: ArticleResponse.self) { response in
+                switch response.result {
+                case .success(let data):
+                    observer.onNext(data.articles)
+                    observer.onCompleted()
+                case .failure(let error):
+                    observer.onError(error)
+                }
+            }
+            
+        return Disposables.create()
+    }
+}
+
+getNews().subscribe { event in
+    switch event {
+    case .next(let articles):
+        print(articles)
+    case .error(let err):
+        print(err.localizedDescription)
+    case .completed:
+        print("complete")
+    }
+}.dispose()
 
 // 기본적인 Rx 생성방법을 알아보았습니다.
 // 간단히 정리 및 사용이유를 알아봅시다
