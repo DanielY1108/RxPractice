@@ -187,4 +187,46 @@ createObservable.subscribe { element in
 // 즉, 여기서 Observable의 escape closure로 데이터를 받아와서 데이터의 변화를 감지하고 구독(subscribe)을 통해 Observer에게 업데이트 된 데이터를 전달합니다.
 // 이러한 과정으로 이벤트가 전달되면 즉시 그 이벤트를 Observer가 구독(subscribe)을 통해 전달 받아 처리하여 UI 업데이트 및 데이터를 실시간으로 반영할 수 있게되는 겁니다.
 
+// MARK: - deferred
+// 무언가를 미룬다는 의미로 사용되는 연산자로 Observable 생성을 연기할 수 있습니다.
+// deferred는 Observable이 생성되는 시점을 구독자(Observer)가 구독(subscribe)전까지 미뤄주는 역활을 합니다.
+
+// 보통 Observable을 생성할 때는 Observable.create를 사용하여 직접 Observable을 만들어주게 되는데,
+// 이 경우에는 Observable이 만들어질 때부터 작업이 시작됩니다.
+
+// 만약 이와같이 바로 just를 사용하여 어떠한 동작을 사용하게되면 just 안쪽에서 함수를 실행시키기 때문에
+// 구독(subscribe)을 하지 않아도 5초 뒤에 "Take a long time t work" 이 출력이 될 것입니다.
+// 구독을 하지도 않았는데 5초라는 시간을 낭비하고 있습니다.
+func heavyWork() {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        print("Take a long time t work")
+    }
+}
+
+let observable = Observable.just(heavyWork())
+
+// 5초 후 Take a long time t work 출력
+
+// 이와같이 중요 쓰레드인 메인스레드에서 어떠한 오래걸리는 작업을 할 때
+// 위와 같이 예를들어 메인쓰레드에서 5초가 걸리는 무거운 작업을 하게 된다면
+// 그 시간동안 UI를 그리는 메인쓰레드를 방해하고 있으므로 5초동안 화면이 멈춘거 같이 보일겁니다.
+
+// 그래서 만들어진 연산자가 구독(subscribe)이 되기전까지 작업을 미뤄주는 역활을 하는 deferred 입니다.
+let deferredObservable = Observable.deferred {
+    // Observable을 리턴해줍니다.
+    return Observable.just(heavyWork())
+}
+
+// 동작을 안하고 구독을 기다림
+
+// 구독을 하는 순간에 heavyWork() 작업이 동작
+deferredObservable.subscribe { _ in
+    // ...
+}
+
+// 5초 후 Take a long time t work 출력
+
+// deferred를 사용하게되면 구독하는 순간 실행되게 때문에 쓸데없는 작업을 막고 필요한 시점에서만 작업을 수행합니다.
+// 즉, 무거운 작업(오래 걸리는 작업)시 쓰레드 낭비를 막을 수 있습니다.
+// 또한, 구독되는 시점에 동작하므로 구독과 동시에 어떠한 업데이트가 필요할 때 deferred로 감싸서 사용하면 됩니다.
 
