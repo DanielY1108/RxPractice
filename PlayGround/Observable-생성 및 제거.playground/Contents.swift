@@ -212,7 +212,7 @@ getNews().subscribe { event in
     case .completed:
         print("complete")
     }
-}.dispose()
+}.disposed(by: disposeBag)
 
 // 기본적인 Rx 생성방법을 알아보았습니다.
 // 간단히 정리 및 사용이유를 알아봅시다
