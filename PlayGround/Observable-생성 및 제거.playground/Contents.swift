@@ -10,30 +10,33 @@ import Alamofire
 let justObservable = Observable.just("Hello World")
 
 
-justObservable.subscribe(onNext: { element in
-    print(element)
-})
+justObservable
+    .subscribe(onNext: { element in
+        print(element)
+    })
 
 // Hello World
 
 // MARK: - of
 // of 안쪽의 타입은 동일해야 한다.
-// element을 순차적으로 방출시킨다. (방출 이벤트: element -> array)
+// element을 순차적으로 방출시킨다.
 let ofObservable: Observable<Int> = Observable.of(1, 2, 3)
 let ofObservableArr: Observable<[Int]> = Observable.of([1, 2, 3])
 
-ofObservable.subscribe(onNext: { element in
-    print(element)
-})
+ofObservable
+    .subscribe(onNext: { element in
+        print(element)
+    })
 
 // 1
 // 2
 // 3
 
 // 배열 자체를 한개의 element로 취급해서 방출시킨다.
-ofObservableArr.subscribe(onNext: { element in
-    print(element)
-})
+ofObservableArr
+    .subscribe(onNext: { element in
+        print(element)
+    })
 
 // [1, 2, 3]
 
@@ -41,9 +44,10 @@ ofObservableArr.subscribe(onNext: { element in
 // 배열로 element를 받아와서 하나하나를 방출시킨다. (방출 이벤트: array -> element)
 let fromObservable = Observable.from([1, 2, 3])
 
-fromObservable.subscribe(onNext: { element in
-    print(element)
-})
+fromObservable
+    .subscribe(onNext: { element in
+        print(element)
+    })
 
 // 1
 // 2
@@ -53,9 +57,10 @@ fromObservable.subscribe(onNext: { element in
 // 범위를 지정해서 카운트를 배출시킨다.
 let rangeObservable = Observable.range(start: 1, count: 5)
 
-rangeObservable.subscribe(onNext: { element in
-    print(element)
-})
+rangeObservable
+    .subscribe(onNext: { element in
+        print(element)
+    })
 
 // 1
 // 2
@@ -66,9 +71,10 @@ rangeObservable.subscribe(onNext: { element in
 // from으로 range를 표현할 수 있다. (방식의 차이, 하지만 의미를 명확하게 사용하기 위해선 range를 사용하자)
 let fromRangeObservable = Observable.from(1...5)
 
-fromRangeObservable.subscribe(onNext: { element in
-    print(element)
-})
+fromRangeObservable
+    .subscribe(onNext: { element in
+        print(element)
+    })
 
 // 1
 // 2
@@ -83,10 +89,34 @@ fromRangeObservable.subscribe(onNext: { element in
 
 let emptyObservable = Observable<Any>.empty()
 
+emptyObservable
+    .subscribe {
+        print($0)
+    } onError: {
+        print($0)
+    } onCompleted: {
+        print("onCompleted")
+    } onDisposed: {
+        print("onDisposed")
+    }
+
 // MARK: - never
 // Observable이 아무런 이벤트도 방출 시키지 않도록 한다. (단! onDisposed 제외)
 
 let neverObservable = Observable<Any>.never()
+
+neverObservable
+    .subscribe {
+        print($0)
+    } onError: {
+        print($0)
+    } onCompleted: {
+        print("onCompleted")
+    } onDisposed: {
+        print("onDisposed")
+    }.dispose()
+
+// onDisposed
 
 // MARK: - Disposable
 // Observable을 구독(subscribe)하게 되면 Disposable(일회성 리소스)을 리턴 값으로 반환합니다.
@@ -100,14 +130,17 @@ let neverObservable = Observable<Any>.never()
 // subscribe의 리턴값을 보면 Disposable을 리턴해줍니다. Disposable에 대한 처리를 하지 않아서 경고가 생기는 거죠.
 
 // 이렇게 직접 dispose를 호출해 구독 취소가 가능하다.
-justObservable.subscribe(onNext: { element in
-    print(element)
-}).dispose()
+let observable1 = Observable.of(1, 2, 3, 4)
+
+observable1
+    .subscribe(onNext: { element in
+        print(element)
+    }).dispose()
 
 // 하지만 만약 구독이 여러개가 있다고 가정해보자.
-let subscribe1 = justObservable.subscribe { _ in }
-let subscribe2 = justObservable.subscribe { _ in }
-let subscribe3 = justObservable.subscribe { _ in }
+let subscribe1 = observable1.subscribe { _ in }
+let subscribe2 = observable1.subscribe { _ in }
+let subscribe3 = observable1.subscribe { _ in }
 
 // 일일히 각각의 해제 시점을 고려해 시퀀스를 끊어줘야 한다.
 subscribe1.dispose()
@@ -120,15 +153,16 @@ subscribe3.dispose()
 // 전역변수로 disposeBag을 만들어 준 뒤 disposed(by:) 메서드에 Disposable를 담아주기만 하면 됩니다.
 
 // disposed(by:)의 정의는 이와같습니다. bag에 Disposable 자신을 넣어줍니다.
-// extension Disposable {
-//     public func disposed(by bag: DisposeBag) {
-//         bag.insert(self)
-//     }
-// }
+//extension Disposable {
+//    public func disposed(by bag: DisposeBag) {
+//        bag.insert(self)
+//    }
+//}
 
 let disposeBag = DisposeBag()
 subscribe1.disposed(by: disposeBag)
 subscribe2.disposed(by: disposeBag)
+
 
 // 어? 그러면 Disposable를 disposeBag에 담아주기만하고 해제는 안시켰는데라고 생각이 드실겁니다.
 // disposeBag의 해제 시점은
@@ -137,7 +171,15 @@ subscribe2.disposed(by: disposeBag)
 // disposeBag = nil
 
 // disposeBag 동작방식은 dispose가 되면 for-in문을 통해 기존의 Disposable을 새로운 Disposable로 변환시켜 줍니다.
+
 // 간단해서 자세한건 정의에 한번 들어가서 살펴보시면 이해되실 겁니다.
+//private func dispose() {
+//    let oldDisposables = self._dispose()
+//
+//    for disposable in oldDisposables {
+//        disposable.dispose()
+//    }
+//}
 
 // MARK: - create
 // 가장 많이 사용하는 생성 방법으로 사용가자 직접 커스텀 Observable을 생성합니다.
@@ -164,11 +206,12 @@ let createObservable = Observable<String>.create { observer in
 }
 
 // 생성을 했으니 구독을 해보면
-createObservable.subscribe { element in
-    print(element)
-} onCompleted: {
-    print("Complete")
-}.disposed(by: disposeBag)
+createObservable
+    .subscribe { element in
+        print(element)
+    } onCompleted: {
+        print("Complete")
+    }.disposed(by: disposeBag)
 
 // Hello World
 // Complete
@@ -246,6 +289,16 @@ func heavyWork() {
 }
 
 let observable = Observable.just(heavyWork())
+observable.subscribe { e in
+    switch e {
+    case .next(let a):
+        a
+    case .completed:
+        print("com")
+    case .error(let err):
+        print(err)
+    }
+}
 
 // 5초 후 Take a long time t work 출력
 
@@ -266,7 +319,6 @@ deferredObservable.subscribe { _ in
     // ...
 }
 
-// 5초 후 Take a long time t work 출력
 
 // deferred를 사용하게되면 구독하는 순간 실행되게 때문에 쓸데없는 작업을 막고 필요한 시점에서만 작업을 수행합니다.
 // 즉, 무거운 작업(오래 걸리는 작업)시 쓰레드 낭비를 막을 수 있습니다.
