@@ -28,6 +28,7 @@ enum SomeError: Error {
 // }
 
 
+
 // MARK: - Single
 // Observable 생성 방식과 비슷합니다.
 
@@ -35,10 +36,8 @@ enum SomeError: Error {
 func observable1() -> Observable<Any> {
     return Observable.create { observer in
         observer.onNext("Operation")
-
-        observer.onError(SomeError.err)
         observer.onCompleted()
-
+        observer.onError(SomeError.err)
         return Disposables.create()
     }
 }
@@ -60,6 +59,7 @@ func singleObservable() -> Single<Any> {
         return Disposables.create()
     }
 }
+
 
 // 당연히 이벤트도 onSuccess, onFailure, onDisposed 만을 갖고 사용합니다.
 singleObservable().subscribe { event in
@@ -184,7 +184,7 @@ mabyeObservable()
     .subscribe { event in
         switch event {
         case.success(let element):
-            print(element)
+            print("Success: \(element)")
         case .completed:
             print("Complete")
         case .error(let error):
@@ -206,9 +206,10 @@ mabyeObservable()
 func observable() -> Observable<Any> {
     return Observable.create { observer in
         observer.onNext("Operation")
-        observer.onCompleted()
 
         observer.onError(SomeError.err)
+        observer.onCompleted()
+
 
         return Disposables.create()
     }

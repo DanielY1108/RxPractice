@@ -20,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		6522753A29B0EBB60023A771 /* Traits.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Traits.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		6522753E29B783F00023A771 /* Subjects.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Subjects.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6550717029AF47FF00C8E67D /* RxPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RxPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6550717329AF47FF00C8E67D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6550717529AF47FF00C8E67D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 				6577D1D829B0801400F99614 /* Observable-개념.playground */,
 				6577D1D929B0802D00F99614 /* Observable-생성 및 제거.playground */,
 				6522753A29B0EBB60023A771 /* Traits.playground */,
+				6522753E29B783F00023A771 /* Subjects.playground */,
 			);
 			path = PlayGround;
 			sourceTree = "<group>";
