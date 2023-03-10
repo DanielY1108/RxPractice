@@ -9,13 +9,17 @@ import Alamofire
 // 오직 하나의 Observable sequence만을 생성
 let justObservable = Observable.just("Hello World")
 
+justObservable.subscribe(onNext: { element in
+    print("Current value: \(element)")
+})
 
-justObservable
-    .subscribe(onNext: { element in
-        print(element)
-    })
+let observer: (String) -> Void = { value in
+    print("Current value: \(value)")
+}
 
-// Hello World
+justObservable.subscribe(onNext: observer)
+
+// Current value: Hello World
 
 // MARK: - of
 // of 안쪽의 타입은 동일해야 한다.
@@ -23,20 +27,18 @@ justObservable
 let ofObservable: Observable<Int> = Observable.of(1, 2, 3)
 let ofObservableArr: Observable<[Int]> = Observable.of([1, 2, 3])
 
-ofObservable
-    .subscribe(onNext: { element in
-        print(element)
-    })
+ofObservable.subscribe(onNext: { element in
+    print(element)
+})
 
 // 1
 // 2
 // 3
 
 // 배열 자체를 한개의 element로 취급해서 방출시킨다.
-ofObservableArr
-    .subscribe(onNext: { element in
-        print(element)
-    })
+ofObservableArr.subscribe(onNext: { element in
+    print(element)
+})
 
 // [1, 2, 3]
 
@@ -44,10 +46,9 @@ ofObservableArr
 // 배열로 element를 받아와서 하나하나를 방출시킨다. (방출 이벤트: array -> element)
 let fromObservable = Observable.from([1, 2, 3])
 
-fromObservable
-    .subscribe(onNext: { element in
-        print(element)
-    })
+fromObservable.subscribe(onNext: { element in
+    print(element)
+})
 
 // 1
 // 2
@@ -57,10 +58,9 @@ fromObservable
 // 범위를 지정해서 카운트를 배출시킨다.
 let rangeObservable = Observable.range(start: 1, count: 5)
 
-rangeObservable
-    .subscribe(onNext: { element in
-        print(element)
-    })
+rangeObservable.subscribe(onNext: { element in
+    print(element)
+})
 
 // 1
 // 2
@@ -71,10 +71,9 @@ rangeObservable
 // from으로 range를 표현할 수 있다. (방식의 차이, 하지만 의미를 명확하게 사용하기 위해선 range를 사용하자)
 let fromRangeObservable = Observable.from(1...5)
 
-fromRangeObservable
-    .subscribe(onNext: { element in
-        print(element)
-    })
+fromRangeObservable.subscribe(onNext: { element in
+    print(element)
+})
 
 // 1
 // 2
@@ -89,32 +88,30 @@ fromRangeObservable
 
 let emptyObservable = Observable<Any>.empty()
 
-emptyObservable
-    .subscribe {
-        print($0)
-    } onError: {
-        print($0)
-    } onCompleted: {
-        print("onCompleted")
-    } onDisposed: {
-        print("onDisposed")
-    }
+emptyObservable.subscribe {
+    print($0)
+} onError: {
+    print($0)
+} onCompleted: {
+    print("onCompleted")
+} onDisposed: {
+    print("onDisposed")
+}
 
 // MARK: - never
 // Observable이 아무런 이벤트도 방출 시키지 않도록 한다. (단! onDisposed 제외)
 
 let neverObservable = Observable<Any>.never()
 
-neverObservable
-    .subscribe {
-        print($0)
-    } onError: {
-        print($0)
-    } onCompleted: {
-        print("onCompleted")
-    } onDisposed: {
-        print("onDisposed")
-    }.dispose()
+neverObservable.subscribe {
+    print($0)
+} onError: {
+    print($0)
+} onCompleted: {
+    print("onCompleted")
+} onDisposed: {
+    print("onDisposed")
+}.dispose()
 
 // onDisposed
 
@@ -132,10 +129,9 @@ neverObservable
 // 이렇게 직접 dispose를 호출해 구독 취소가 가능하다.
 let observable1 = Observable.of(1, 2, 3, 4)
 
-observable1
-    .subscribe(onNext: { element in
-        print(element)
-    }).dispose()
+observable1.subscribe(onNext: { element in
+    print(element)
+}).dispose()
 
 // 하지만 만약 구독이 여러개가 있다고 가정해보자.
 let subscribe1 = observable1.subscribe { _ in }
@@ -192,9 +188,9 @@ subscribe2.disposed(by: disposeBag)
 // 위에서 구독(subsribe)를 하게되면 Disposable(일회성 리소스)를 리턴한다고 했습니다.
 // 커스텀으로 create를 생성 시 일회성 리소스인 Disposable을 사용하기 위해 Disposables.create()로 필수적으로 구현해줘야 합니다.
 
- let createObservable0 = Observable<String>.create { observer in
-     return Disposables.create()
- }
+let createObservable0 = Observable<String>.create { observer in
+    return Disposables.create()
+}
 
 // 이제 이벤트에 대한 처리를 해보겠습니다.
 // 클로저의 파라미터에서 Dot(.) 접근한 뒤 onNext(), onCompleted(), onError() 데이터를 전달해주면 됩니다.
@@ -205,13 +201,13 @@ let createObservable = Observable<String>.create { observer in
     return Disposables.create()
 }
 
+
 // 생성을 했으니 구독을 해보면
-createObservable
-    .subscribe { element in
-        print(element)
-    } onCompleted: {
-        print("Complete")
-    }.disposed(by: disposeBag)
+createObservable.subscribe { element in
+    print(element)
+} onCompleted: {
+    print("Complete")
+}.disposed(by: disposeBag)
 
 // Hello World
 // Complete
@@ -241,7 +237,7 @@ func getNews() -> Observable<[Article]> {
                     observer.onError(error)
                 }
             }
-            
+        
         return Disposables.create()
     }
 }
@@ -289,10 +285,10 @@ func heavyWork() {
 }
 
 let observable = Observable.just(heavyWork())
-observable.subscribe { e in
-    switch e {
-    case .next(let a):
-        a
+observable.subscribe { event in
+    switch event {
+    case .next(let work):
+        work
     case .completed:
         print("com")
     case .error(let err):
